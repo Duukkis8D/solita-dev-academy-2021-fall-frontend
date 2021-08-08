@@ -5,8 +5,8 @@ const App = () => {
 	const [ date, setDate ] = useState( '' )
 	const [ time, setTime ] = useState( '' )
 	const [ dateAndTime, setDateAndTime ] = useState( '' )
-	const [ amountOfVaccinationsDone, setAmountOfVaccinationsDone ] = useState( '' )
-	const [ amountOfVaccines, setAmountOfVaccines ] = useState( '' )
+	const [ amountOfVaccinationsDone, setAmountOfVaccinationsDone ] = useState( 0 )
+	const [ amountOfVaccines, setAmountOfVaccines ] = useState( 0 )
 
 	const handleDateTimeSubmit = ( event ) => {
 		event.preventDefault()
@@ -21,42 +21,43 @@ const App = () => {
 	}
 
 	const handleDateChange = ( event ) => {
-		console.log( 'date:', event.target.value )
 		setDate( event.target.value )
 	}
 
 	const handleTimeChange = ( event ) => {
-		console.log( 'time:', event.target.value )
 		setTime( event.target.value )
 	}
 
 	useEffect( () => {
-		orderService
-			.getAmountOfVaccinationsDone( dateAndTime )
-			.then( response => {
-				console.log( 'useEffect(), getAmountOfVaccinationsDone, response[0]:', response[0].numberOfVaccinationsDone )
-				setAmountOfVaccinationsDone( response[0].numberOfVaccinationsDone )
-			} )
-		orderService
-			.getAmountOfVaccines( dateAndTime )
-			.then( response => {
-				console.log( 'useEffect(), getAmountOfVaccines, response[0]:', response[0].totalNumberOfVaccines )
-				setAmountOfVaccines( response[0].totalNumberOfVaccines )
-			} )
+		if( dateAndTime !== '' ) {
+			orderService
+				.getAmountOfVaccinationsDone( dateAndTime )
+				.then( response => {
+					setAmountOfVaccinationsDone( response[0].numberOfVaccinationsDone )
+				} )
+			orderService
+				.getAmountOfVaccines( dateAndTime )
+				.then( response => {
+					setAmountOfVaccines( response[0].totalNumberOfVaccines )
+				} )
+		}
 	}, [ dateAndTime ] )
 
 	const renderIfDataIsAvailable = () => {
-		if( typeof amountOfVaccinationsDone !== 'undefined' && typeof amountOfVaccines !== 'undefined' ) {
+		if( typeof amountOfVaccinationsDone !== 'undefined' && 
+			amountOfVaccinationsDone !== 0 &&
+			typeof amountOfVaccines !== 'undefined' &&
+			amountOfVaccines !== 0 ) {
 			return (
 				<div id='vaccineInformation'>
 					<h2>Vaccine information</h2>
 					<div>
-						<p>Amount of vaccinations done:</p><span>{ amountOfVaccinationsDone }</span>
-						<p>Amount of vaccines:</p><span>{ amountOfVaccines }</span>
+						<p>Amount of vaccinations done: <span>{ amountOfVaccinationsDone }</span></p>
+						<p>Amount of vaccines: <span>{ amountOfVaccines }</span></p>
 					</div>
 				</div>
 			)
-		} else return <p>Loading data. Please wait.</p>
+		}
 	}
 
 	return (
