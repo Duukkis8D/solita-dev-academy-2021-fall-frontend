@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import orderService from './services/orderService'
+import vaccinationService from './services/vaccinationService'
 
 const App = () => {
 	const [ date, setDate ] = useState( '' )
 	const [ time, setTime ] = useState( '' )
-	const [ dateAndTime, setDateAndTime ] = useState( '' )
+	const [ dateAndTime, setDateAndTime ] = useState( new Date() )
 	const [ amountOfVaccinationsDone, setAmountOfVaccinationsDone ] = useState( 0 )
 	const [ amountOfVaccines, setAmountOfVaccines ] = useState( 0 )
 
@@ -30,10 +31,10 @@ const App = () => {
 
 	useEffect( () => {
 		if( dateAndTime !== '' ) {
-			orderService
+			vaccinationService
 				.getAmountOfVaccinationsDone( dateAndTime )
 				.then( response => {
-					setAmountOfVaccinationsDone( response[0].numberOfVaccinationsDone )
+					setAmountOfVaccinationsDone( response[0].count )
 				} )
 			orderService
 				.getAmountOfVaccines( dateAndTime )
@@ -50,7 +51,6 @@ const App = () => {
 			amountOfVaccines !== 0 ) {
 			return (
 				<div id='vaccineInformation'>
-					<h2>Vaccine information</h2>
 					<div>
 						<p>Amount of vaccinations done: <span>{ amountOfVaccinationsDone }</span></p>
 						<p>Amount of vaccines: <span>{ amountOfVaccines }</span></p>
@@ -63,6 +63,10 @@ const App = () => {
 	return (
 		<div id='appContainer'>
 			<h1>THL vaccine orders and vaccinations</h1>
+			<h2>Up to this date</h2>
+			<p><span>{ dateAndTime.toString() }</span></p>
+			{ renderIfDataIsAvailable() }
+			<h2>Filter results by entering date and time</h2>
 			<form id='dateTimePickerForm' onSubmit={ handleDateTimeSubmit }>
 				<div id='dateTimePickerContainer'>
 					<label htmlFor='datePicker'>Choose date</label><br></br>
@@ -72,7 +76,6 @@ const App = () => {
 					<button type='submit'>Send</button>
 				</div>
 			</form>
-			{ renderIfDataIsAvailable() }
 		</div>
 	)
 }
