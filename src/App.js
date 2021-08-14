@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import BasicStatistics from './components/BasicStatistics'
+import StatisticsBasedOnUserInput from './components/StatisticsBasedOnUserInput'
+import Filter from './components/Filter'
 import orderService from './services/orderService'
 import vaccinationService from './services/vaccinationService'
 import timeMachineImg from './img/time_machine.jpg'
@@ -61,10 +64,16 @@ const App = () => {
 			} )
 	}, [] )
 
+	const [ amountOfOrders, setAmountOfOrders ] = useState( 0 )
 	const [ amountOfVaccinationsDone, setAmountOfVaccinationsDone ] = useState( 0 )
 	const [ amountOfVaccines, setAmountOfVaccines ] = useState( 0 )
 	useEffect( () => {
 		if( dateAndTime !== '' ) {
+			orderService
+				.getAmountOfOrders( dateAndTime )
+				.then( response => {
+					setAmountOfOrders( formatServerResponse( response ) )
+				} )
 			vaccinationService
 				.getAmountOfVaccinationsDone( dateAndTime )
 				.then( response => {
@@ -83,60 +92,36 @@ const App = () => {
 		setVaccinesLeftToUse( amountOfVaccines - amountOfVaccinationsDone )
 	}, [ amountOfVaccinationsDone, amountOfVaccines ] )
 
-	const renderBasicStatistics = () => {
-		if( typeof dateOfFirstOrder !== 'undefined' &&
-			dateOfFirstOrder !== '' &&
-			typeof dateOfLatestOrder !== 'undefined' && 
-			dateOfLatestOrder !== '' &&
-			typeof dateOfFirstVaccination !== 'undefined' &&
-			dateOfFirstVaccination !== '' &&
-			typeof dateOfLatestVaccination !== 'undefined' &&
-			dateOfLatestVaccination !== '' ) {
-			return (
-				<div id='basicStatistics'>
-					<p>Date of first vaccine order: <span>{ dateOfFirstOrder }</span></p>
-					<p>Date of latest vaccine order: <span>{ dateOfLatestOrder }</span></p>
-					<p>Date of first vaccination: <span>{ dateOfFirstVaccination }</span></p>
-					<p>Date of latest vaccination: <span>{ dateOfLatestVaccination }</span></p>
-				</div>
-			)
-		} else return <div id='basicStatistics'><p>Loading. Please wait.</p></div>
-	}
-
-	const renderStatisticsBasedOnUserInput = () => {
-		if( typeof amountOfVaccinationsDone !== 'undefined' && 
-			amountOfVaccinationsDone !== 0 &&
-			typeof amountOfVaccines !== 'undefined' &&
-			amountOfVaccines !== 0 ) {
-			return (
-				<div id='vaccineInformation'>
-					<p>Amount of vaccinations done: <span>{ amountOfVaccinationsDone }</span></p>
-					<p>Amount of vaccines: <span>{ amountOfVaccines }</span></p>
-					<p>Amount of vaccines left to use: <span>{ vaccinesLeftToUse }</span> (Some of them might be expired!)</p>
-				</div>
-			)
-		} else return <div id='vaccineInformation'><p>Loading. Please wait.</p></div>
-	}
-
 	return (
 		<div id='appContainer'>
 			<h1>THL vaccine orders and vaccinations</h1>
-			{ renderBasicStatistics() }
+			
+			<BasicStatistics
+				dateOfFirstOrder={ dateOfFirstOrder }
+				dateOfLatestOrder={ dateOfLatestOrder }
+				dateOfFirstVaccination={ dateOfFirstVaccination }
+				dateOfLatestVaccination={ dateOfLatestVaccination }>
+			</BasicStatistics>
+
 			<h2>Up to this date</h2>
 			<p><span>{ dateAndTime.toString() }</span></p>
-			{ renderStatisticsBasedOnUserInput() }
+
+			<StatisticsBasedOnUserInput
+				amountOfOrders={ amountOfOrders }
+				amountOfVaccines={ amountOfVaccines }
+				amountOfVaccinationsDone={ amountOfVaccinationsDone }
+				vaccinesLeftToUse={ vaccinesLeftToUse }>
+			</StatisticsBasedOnUserInput>
+
 			<h2>Filter results by using the following time machine</h2>
-			<img src={ timeMachineImg } alt='funny time machine' width='300px' />
-			<form id='dateTimePickerForm' onSubmit={ handleDateTimeSubmit }>
-				<div id='dateTimePickerContainer'>
-					<label htmlFor='datePicker'>Choose date</label><br></br>
-					<input type='date' id='datePicker' name='datePicker' value={ date } onChange={ handleDateChange } required></input><br></br>
-					<label htmlFor='timePicker'>Choose time</label><br></br>
-					<input type='time' step='1' id='timePicker' name='timePicker' value={ time } onChange={ handleTimeChange } required></input><br></br>
-					<button type='submit'>Send</button>
-				</div>
-			</form>
-			<p>Photo <a href="https://www.dreamstime.com/royalty-free-stock-image-time-machine-humour-concept-image17334246">17334246</a> / <a href="https://www.dreamstime.com/photos-images/time-machine.html">Time Machine</a> © <a href="https://www.dreamstime.com/vilax_info">Aleksandr Volkov</a> | <a href="https://www.dreamstime.com/photos-images/time-machine.html">Dreamstime.com</a></p>
+			<Filter
+				timeMachineImg={ timeMachineImg }
+				handleDateTimeSubmit={ handleDateTimeSubmit }
+				date={ date }
+				handleDateChange={ handleDateChange }
+				time={ time }
+				handleTimeChange={ handleTimeChange }>
+			</Filter>
 		</div>
 	)
 }

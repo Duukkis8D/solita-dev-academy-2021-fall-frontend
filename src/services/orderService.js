@@ -11,6 +11,11 @@ const getDateOfLatestOrder = () => {
 	return request.then( response => response.data )
 }
 
+const getAmountOfOrders = ( dateAndTime ) => {
+	const request = axios.get( `${baseUrl}/amountOfOrders/${dateAndTime}` )
+	return request.then( response => response.data )
+}
+
 const getAmountOfVaccines = ( dateAndTime ) => {
 	const request = axios.get( `${baseUrl}/amountOfVaccines/${dateAndTime}` )
 	return request.then( response => response.data )
@@ -19,5 +24,6 @@ const getAmountOfVaccines = ( dateAndTime ) => {
 export default {
 	getDateOfFirstOrder,
 	getDateOfLatestOrder,
+	getAmountOfOrders,
 	getAmountOfVaccines
 }
