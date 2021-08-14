@@ -28,18 +28,36 @@ const App = () => {
 		setTime( event.target.value )
 	}
 
+	const formatServerResponse = ( response ) => {
+		// eslint-disable-next-line no-unused-vars
+		const responseObjectKey = Object.keys( response[0] )[0]
+		return response[0][responseObjectKey]
+	}
+
 	const [ dateOfFirstOrder, setDateOfFirstOrder ] = useState( '' )
 	const [ dateOfLatestOrder, setDateOfLatestOrder ] = useState( '' )
+	const [ dateOfFirstVaccination, setDateOfFirstVaccination ] = useState( '' )
+	const [ dateOfLatestVaccination, setDateOfLatestVaccination ] = useState( '' )
 	useEffect( () => {
 		orderService
 			.getDateOfFirstOrder()
 			.then( response => {
-				setDateOfFirstOrder( response[0].firstOrder )
+				setDateOfFirstOrder( formatServerResponse( response ) )
 			} )
 		orderService
 			.getDateOfLatestOrder()
 			.then( response => {
-				setDateOfLatestOrder( response[0].latestOrder )
+				setDateOfLatestOrder( formatServerResponse( response ) )
+			} )
+		vaccinationService
+			.getDateOfFirstVaccination()
+			.then( response => {
+				setDateOfFirstVaccination( formatServerResponse( response ) )
+			} )
+		vaccinationService
+			.getDateOfLatestVaccination()
+			.then( response => {
+				setDateOfLatestVaccination( formatServerResponse( response ) )
 			} )
 	}, [] )
 
@@ -50,12 +68,12 @@ const App = () => {
 			vaccinationService
 				.getAmountOfVaccinationsDone( dateAndTime )
 				.then( response => {
-					setAmountOfVaccinationsDone( response[0].count )
+					setAmountOfVaccinationsDone( formatServerResponse( response ) )
 				} )
 			orderService
 				.getAmountOfVaccines( dateAndTime )
 				.then( response => {
-					setAmountOfVaccines( response[0].totalNumberOfVaccines )
+					setAmountOfVaccines( formatServerResponse( response ) )
 				} )
 		}
 	}, [ dateAndTime ] )
@@ -69,11 +87,17 @@ const App = () => {
 		if( typeof dateOfFirstOrder !== 'undefined' &&
 			dateOfFirstOrder !== '' &&
 			typeof dateOfLatestOrder !== 'undefined' && 
-			dateOfLatestOrder !== '' ) {
+			dateOfLatestOrder !== '' &&
+			typeof dateOfFirstVaccination !== 'undefined' &&
+			dateOfFirstVaccination !== '' &&
+			typeof dateOfLatestVaccination !== 'undefined' &&
+			dateOfLatestVaccination !== '' ) {
 			return (
 				<div id='basicStatistics'>
-					<p>Date of first vaccination order: <span>{ dateOfFirstOrder }</span></p>
-					<p>Date of latest vaccination order: <span>{ dateOfLatestOrder }</span></p>
+					<p>Date of first vaccine order: <span>{ dateOfFirstOrder }</span></p>
+					<p>Date of latest vaccine order: <span>{ dateOfLatestOrder }</span></p>
+					<p>Date of first vaccination: <span>{ dateOfFirstVaccination }</span></p>
+					<p>Date of latest vaccination: <span>{ dateOfLatestVaccination }</span></p>
 				</div>
 			)
 		} else return <div id='basicStatistics'><p>Loading. Please wait.</p></div>
