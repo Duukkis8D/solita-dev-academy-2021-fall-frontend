@@ -14,13 +14,16 @@ const App = () => {
 	const handleDateTimeSubmit = ( event ) => {
 		event.preventDefault()
 
+		console.log( 'date, event.target[0].value:', event.target[0].value )
+		console.log( 'time, event.target[1].value:', event.target[1].value )
 		const submittedDate = event.target[0].value
 		const submittedTime = event.target[1].value
-		setDateAndTime( submittedDate
-			.concat( 'T' )
-			.concat( submittedTime )
-			.concat( 'Z' ) 
-		)
+		setDateAndTime( new Date(
+			submittedDate
+				.concat( 'T' )
+				.concat( submittedTime )
+				.concat( 'Z' )
+		) )
 	}
 
 	const handleDateChange = ( event ) => {
@@ -37,6 +40,23 @@ const App = () => {
 		return response[0][responseObjectKey]
 	}
 
+	const formatDateAndTimeObject = ( dateAndTimeObject ) => {
+		console.log( 'dateAndTimeObject:', dateAndTimeObject )
+		return (
+			dateAndTimeObject.getUTCFullYear() +
+			'-' + ( '0' + ( dateAndTimeObject.getUTCMonth() + 1 ) ).slice( -2 ) + 
+			'-' + ( '0' + dateAndTimeObject.getUTCDate() ).slice( -2 ) + 
+			' ' + ( '0' + dateAndTimeObject.getUTCHours() ).slice( -2 ) +
+			':' + ( '0' + dateAndTimeObject.getUTCMinutes() ).slice( -2 ) +
+			':' + ( '0' + dateAndTimeObject.getUTCSeconds() ).slice( -2 )
+		)
+	}
+
+	const formatDateAndTimeString = ( dateAndTimeString ) => {
+		//'2021-11-25T21:28:06.655Z' --> '2021-11-25 21:28:06'
+		return formatDateAndTimeObject( new Date( dateAndTimeString ) )
+	}
+
 	const [ dateOfFirstOrder, setDateOfFirstOrder ] = useState( '' )
 	const [ dateOfLatestOrder, setDateOfLatestOrder ] = useState( '' )
 	const [ dateOfFirstVaccination, setDateOfFirstVaccination ] = useState( '' )
@@ -45,22 +65,22 @@ const App = () => {
 		orderService
 			.getDateOfFirstOrder()
 			.then( response => {
-				setDateOfFirstOrder( formatServerResponse( response ) )
+				setDateOfFirstOrder( formatDateAndTimeString( formatServerResponse( response ) ) )
 			} )
 		orderService
 			.getDateOfLatestOrder()
 			.then( response => {
-				setDateOfLatestOrder( formatServerResponse( response ) )
+				setDateOfLatestOrder( formatDateAndTimeString( formatServerResponse( response ) ) )
 			} )
 		vaccinationService
 			.getDateOfFirstVaccination()
 			.then( response => {
-				setDateOfFirstVaccination( formatServerResponse( response ) )
+				setDateOfFirstVaccination( formatDateAndTimeString( formatServerResponse( response ) ) )
 			} )
 		vaccinationService
 			.getDateOfLatestVaccination()
 			.then( response => {
-				setDateOfLatestVaccination( formatServerResponse( response ) )
+				setDateOfLatestVaccination( formatDateAndTimeString( formatServerResponse( response ) ) )
 			} )
 	}, [] )
 
@@ -95,7 +115,8 @@ const App = () => {
 	return (
 		<div id='appContainer'>
 			<h1>THL vaccine orders and vaccinations</h1>
-			
+			<p>All dates are UTC (Coordinated Universal Time)</p>
+
 			<BasicStatistics
 				dateOfFirstOrder={ dateOfFirstOrder }
 				dateOfLatestOrder={ dateOfLatestOrder }
@@ -103,8 +124,8 @@ const App = () => {
 				dateOfLatestVaccination={ dateOfLatestVaccination }>
 			</BasicStatistics>
 
-			<h2>Up to this date</h2>
-			<p><span>{ dateAndTime.toString() }</span></p>
+			<h2>Up to this date (your local time zone)</h2>
+			<p><span>{ formatDateAndTimeObject( dateAndTime ) }</span></p>
 
 			<StatisticsBasedOnUserInput
 				amountOfOrders={ amountOfOrders }
