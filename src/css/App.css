@@ -1,0 +1,95 @@
+/* Small (mobile) screens */
+
+html {
+    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape while allowing user zoom */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#appContainer {
+	max-width: 800px;
+	margin: 0 auto;
+	display: grid;
+}
+
+#appContainer:first-child {
+    margin-top: 10px;
+}
+
+#appContainer:last-child {
+    margin-bottom: 10px;
+}
+
+#appContainer > * {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+h1 {
+	margin-top: 10px;
+	margin-bottom: 0;
+	font-size: 28px;
+}
+
+#allDatesUTC {
+	margin-top: 10px;
+}
+
+#basicStatistics {
+	margin-top: 10px;
+}
+
+h2 {
+	font-weight: normal;
+	font-size: 18px;
+}
+
+#givenDateHeadline,
+#filterHeadline {
+	margin-top: 28px;
+}
+
+#timeMachineImg {
+	margin-bottom: 15px;
+}
+
+p,
+label,
+#givenDate {
+	font-size: 16px;
+}
+
+input,
+button {
+    font-size: 14px;
+	padding: 7px 5px 7px 5px;
+	margin: 5px 0 15px 0;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+}
+
+input {
+    width: 170px;
+    height: 35px;
+}
+
+button {
+	width: 70px;
+	height: 35px;
+}
+
+#basicStatistics,
+#statisticsBasedOnUserInput,
+#timeMachineImg {
+	border: 2px solid orange;
+	border-radius: 5px;
+}
+
+#basicStatistics > *,
+#statisticsBasedOnUserInput > * {
+	margin-left: 8px;
+	margin-right: 8px;
+}

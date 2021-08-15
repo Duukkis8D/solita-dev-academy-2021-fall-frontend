@@ -5,6 +5,7 @@ import Filter from './components/Filter'
 import orderService from './services/orderService'
 import vaccinationService from './services/vaccinationService'
 import timeMachineImg from './img/time_machine.jpg'
+import './css/App.css'
 
 const App = () => {
 	const [ date, setDate ] = useState( '' )
@@ -115,7 +116,7 @@ const App = () => {
 	return (
 		<div id='appContainer'>
 			<h1>THL vaccine orders and vaccinations</h1>
-			<p>All dates are UTC (Coordinated Universal Time)</p>
+			<p id='allDatesUTC'>All dates are UTC (Coordinated Universal Time) unless otherwise stated</p>
 
 			<BasicStatistics
 				dateOfFirstOrder={ dateOfFirstOrder }
@@ -124,8 +125,9 @@ const App = () => {
 				dateOfLatestVaccination={ dateOfLatestVaccination }>
 			</BasicStatistics>
 
-			<h2>Up to this date (your local time zone)</h2>
-			<p><span>{ formatDateAndTimeObject( dateAndTime ) }</span></p>
+			<h2 id='givenDateHeadline'>
+				Up to the following date (your local time zone) <span id='givenDate'>{ formatDateAndTimeObject( dateAndTime ) }</span>
+			</h2>
 
 			<StatisticsBasedOnUserInput
 				amountOfOrders={ amountOfOrders }
@@ -134,15 +136,19 @@ const App = () => {
 				vaccinesLeftToUse={ vaccinesLeftToUse }>
 			</StatisticsBasedOnUserInput>
 
-			<h2>Filter results by using the following time machine</h2>
+			<h2 id='filterHeadline'>Filter results by using the following time machine</h2>
+
+			<img id='timeMachineImg' src={ timeMachineImg } alt='funny time machine' width='300px' />
+
 			<Filter
-				timeMachineImg={ timeMachineImg }
 				handleDateTimeSubmit={ handleDateTimeSubmit }
 				date={ date }
 				handleDateChange={ handleDateChange }
 				time={ time }
 				handleTimeChange={ handleTimeChange }>
 			</Filter>
+
+			<p>Photo <a href="https://www.dreamstime.com/royalty-free-stock-image-time-machine-humour-concept-image17334246">17334246</a> / <a href="https://www.dreamstime.com/photos-images/time-machine.html">Time Machine</a> © <a href="https://www.dreamstime.com/vilax_info">Aleksandr Volkov</a> | <a href="https://www.dreamstime.com/photos-images/time-machine.html">Dreamstime.com</a></p>
 		</div>
 	)
 }
