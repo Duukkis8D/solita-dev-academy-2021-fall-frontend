@@ -1,3 +1,9 @@
+@font-face {
+    font-family: "Nimbus Mono L";
+    src: url("../fonts/Nimbus_Mono_L_W03_Regular.woff2") format("woff2"), 
+         url("../fonts/Nimbus_Mono_L_W03_Regular.woff") format("woff");
+}
+
 /* Small (mobile) screens */
 
 html {
@@ -6,10 +12,11 @@ html {
 
 * {
     box-sizing: border-box;
+	font-family: Verdana, sans-serif;
 }
 
 #appContainer {
-	max-width: 800px;
+	max-width: 520px;
 	margin: 0 auto;
 	display: grid;
 }
@@ -27,28 +34,32 @@ html {
     margin-right: 5px;
 }
 
+h1,
+h2 {
+    font-family: "Nimbus Mono L", monospace;
+    font-weight: normal;
+}
+
 h1 {
 	margin-top: 10px;
 	margin-bottom: 0;
-	font-size: 28px;
+	font-size: 32px;
 }
 
-#allDatesUTC {
-	margin-top: 10px;
+#allDatesUTC,
+#timeMachineDescription {
+	margin-top: 14px;
 }
 
 #basicStatistics {
 	margin-top: 10px;
 }
 
-h2 {
-	font-weight: normal;
-	font-size: 18px;
-}
-
-#givenDateHeadline,
-#filterHeadline {
+#timeMachineHeadline {
 	margin-top: 28px;
+	margin-bottom: 0;
+	font-size: 24px;
+	font-weight: normal;
 }
 
 #timeMachineImg {
@@ -57,7 +68,7 @@ h2 {
 
 p,
 label,
-#givenDate {
+span {
 	font-size: 16px;
 }
 
@@ -66,7 +77,7 @@ button {
     font-size: 14px;
 	padding: 7px 5px 7px 5px;
 	margin: 5px 0 15px 0;
-    border: 2px solid orange;
+    border: 2px solid #eb6c3f;
     border-radius: 5px;
     background-color: white;
 }
@@ -77,14 +88,29 @@ input {
 }
 
 button {
-	width: 70px;
+	width: 90px;
 	height: 35px;
+}
+
+#givenDateDescription {
+	margin-bottom: 8px;
+}
+
+#givenDate {
+	font-family: "Nimbus Mono L", monospace;
+    font-weight: normal;
+	margin-top: 0;
+	font-size: 18px;
+}
+
+#expirationNote {
+	font-size: 12px;
 }
 
 #basicStatistics,
 #statisticsBasedOnUserInput,
 #timeMachineImg {
-	border: 2px solid orange;
+	border: 2px solid #eb6c3f;
 	border-radius: 5px;
 }
 
@@ -92,4 +118,73 @@ button {
 #statisticsBasedOnUserInput > * {
 	margin-left: 8px;
 	margin-right: 8px;
+}
+
+#photoInfo {
+	margin-top: 25px;
+	font-size: 12px;
+}
+
+/* Medium (mobile) and large screens */
+
+@media only screen and ( min-width: 500px ) {
+	#appContainer {
+		grid-template-columns: 1fr 0.8fr;
+		grid-template-rows: auto;
+		grid-template-areas:
+			"header header"
+			"allDatesUTC allDatesUTC"
+			"basicStatistics basicStatistics"
+			"timeMachineHeadline timeMachineHeadline"
+			"timeMachineDescription timeMachineDescription"
+			"timeMachineImg timeMachineInputFields"
+			"givenDateDescription givenDateDescription"
+			"givenDate givenDate"
+			"timeMachineStatistics timeMachineStatistics"
+			"photoInfo photoInfo"
+	}
+
+	h1 {
+        grid-area: header;
+    }
+
+	#allDatesUTC {
+		grid-area: allDatesUTC;
+	}
+
+	#basicStatistics {
+		grid-area: basicStatistics;
+	}
+
+	#timeMachineHeadline {
+		grid-area: timeMachineHeadline;
+	}
+
+	#timeMachineDescription {
+		grid-area: timeMachineDescription;
+	}
+
+	#timeMachineImg {
+		grid-area: timeMachineImg;
+	}
+
+	#dateTimePickerContainer {
+		grid-area: timeMachineInputFields;
+	}
+
+	#givenDateDescription {
+		grid-area: givenDateDescription;
+	}
+
+	#givenDate {
+		grid-area: givenDate;
+	}
+
+	#statisticsBasedOnUserInput {
+		grid-area: timeMachineStatistics;
+	}
+
+	#photoInfo {
+		grid-area: photoInfo;
+	}
 }

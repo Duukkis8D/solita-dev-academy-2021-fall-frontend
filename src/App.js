@@ -15,8 +15,6 @@ const App = () => {
 	const handleDateTimeSubmit = ( event ) => {
 		event.preventDefault()
 
-		console.log( 'date, event.target[0].value:', event.target[0].value )
-		console.log( 'time, event.target[1].value:', event.target[1].value )
 		const submittedDate = event.target[0].value
 		const submittedTime = event.target[1].value
 		setDateAndTime( new Date(
@@ -42,7 +40,6 @@ const App = () => {
 	}
 
 	const formatDateAndTimeObject = ( dateAndTimeObject ) => {
-		console.log( 'dateAndTimeObject:', dateAndTimeObject )
 		return (
 			dateAndTimeObject.getUTCFullYear() +
 			'-' + ( '0' + ( dateAndTimeObject.getUTCMonth() + 1 ) ).slice( -2 ) + 
@@ -85,9 +82,39 @@ const App = () => {
 			} )
 	}, [] )
 
-	const [ amountOfOrders, setAmountOfOrders ] = useState( 0 )
-	const [ amountOfVaccinationsDone, setAmountOfVaccinationsDone ] = useState( 0 )
-	const [ amountOfVaccines, setAmountOfVaccines ] = useState( 0 )
+	const [ minDateAndTime, setMinDateAndTime ] = useState( '' )
+	const [ maxDateAndTime, setMaxDateAndTime ] = useState( '' )
+	useEffect( () => {
+		if( typeof dateOfFirstOrder !== 'undefined' &&
+			dateOfFirstOrder !== '' &&
+			typeof dateOfLatestOrder !== 'undefined' &&
+			dateOfLatestOrder !== '' &&
+			typeof dateOfFirstVaccination !== 'undefined' &&
+			dateOfFirstVaccination !== '' &&
+			typeof dateOfLatestVaccination !== 'undefined' &&
+			dateOfLatestVaccination !== '' ) {
+			if( new Date( dateOfFirstOrder ) < new Date( dateOfFirstVaccination ) ) {
+				setMinDateAndTime( new Date( dateOfFirstOrder ) )
+			} else {
+				setMinDateAndTime( new Date( dateOfFirstVaccination ) )
+			}
+
+			if( new Date( dateOfLatestOrder ) < new Date( dateOfLatestVaccination ) ) {
+				setMaxDateAndTime( new Date( dateOfLatestVaccination ) )
+			} else {
+				setMaxDateAndTime( new Date( dateOfLatestOrder ) )
+			}
+		}
+	}, [ 
+		dateOfFirstOrder,
+		dateOfLatestOrder,
+		dateOfFirstVaccination,
+		dateOfLatestVaccination 
+	] )
+
+	const [ amountOfOrders, setAmountOfOrders ] = useState( '' )
+	const [ amountOfVaccinationsDone, setAmountOfVaccinationsDone ] = useState( '' )
+	const [ amountOfVaccines, setAmountOfVaccines ] = useState( '' )
 	useEffect( () => {
 		if( dateAndTime !== '' ) {
 			orderService
@@ -108,15 +135,15 @@ const App = () => {
 		}
 	}, [ dateAndTime ] )
 
-	const [ vaccinesLeftToUse, setVaccinesLeftToUse ] = useState( 0 )
+	const [ vaccinesLeftToUse, setVaccinesLeftToUse ] = useState( '' )
 	useEffect( () => {
 		setVaccinesLeftToUse( amountOfVaccines - amountOfVaccinationsDone )
 	}, [ amountOfVaccinationsDone, amountOfVaccines ] )
 
 	return (
 		<div id='appContainer'>
-			<h1>THL vaccine orders and vaccinations</h1>
-			<p id='allDatesUTC'>All dates are UTC (Coordinated Universal Time) unless otherwise stated</p>
+			<h1>THL vaccine orders and vaccinations <span role='img' aria-label='vaccination'>💉</span></h1>
+			<p id='allDatesUTC'><span role='img' aria-label='info'>ℹ️</span> All dates are UTC (Coordinated Universal Time)</p>
 
 			<BasicStatistics
 				dateOfFirstOrder={ dateOfFirstOrder }
@@ -125,9 +152,22 @@ const App = () => {
 				dateOfLatestVaccination={ dateOfLatestVaccination }>
 			</BasicStatistics>
 
-			<h2 id='givenDateHeadline'>
-				Up to the following date (your local time zone) <span id='givenDate'>{ formatDateAndTimeObject( dateAndTime ) }</span>
-			</h2>
+			<h2 id='timeMachineHeadline'>Go back in time section</h2>
+			<p id='timeMachineDescription'><span role='img' aria-label='calendar'>📅</span> Give a date and time to this time machine to see the history</p>
+			<img id='timeMachineImg' src={ timeMachineImg } alt='funny time machine' width='245px' />
+
+			<Filter
+				handleDateTimeSubmit={ handleDateTimeSubmit }
+				date={ date }
+				handleDateChange={ handleDateChange }
+				time={ time }
+				handleTimeChange={ handleTimeChange }
+				minDateAndTime={ minDateAndTime }
+				maxDateAndTime={ maxDateAndTime }>
+			</Filter>
+
+			<p id='givenDateDescription'>Data based on the following date:</p>
+			<p id='givenDate'>{ formatDateAndTimeObject( dateAndTime ) }</p>
 
 			<StatisticsBasedOnUserInput
 				amountOfOrders={ amountOfOrders }
@@ -136,19 +176,7 @@ const App = () => {
 				vaccinesLeftToUse={ vaccinesLeftToUse }>
 			</StatisticsBasedOnUserInput>
 
-			<h2 id='filterHeadline'>Filter results by using the following time machine</h2>
-
-			<img id='timeMachineImg' src={ timeMachineImg } alt='funny time machine' width='300px' />
-
-			<Filter
-				handleDateTimeSubmit={ handleDateTimeSubmit }
-				date={ date }
-				handleDateChange={ handleDateChange }
-				time={ time }
-				handleTimeChange={ handleTimeChange }>
-			</Filter>
-
-			<p>Photo <a href="https://www.dreamstime.com/royalty-free-stock-image-time-machine-humour-concept-image17334246">17334246</a> / <a href="https://www.dreamstime.com/photos-images/time-machine.html">Time Machine</a> © <a href="https://www.dreamstime.com/vilax_info">Aleksandr Volkov</a> | <a href="https://www.dreamstime.com/photos-images/time-machine.html">Dreamstime.com</a></p>
+			<p id='photoInfo'>Photo <a href="https://www.dreamstime.com/royalty-free-stock-image-time-machine-humour-concept-image17334246">17334246</a> / <a href="https://www.dreamstime.com/photos-images/time-machine.html">Time Machine</a> © <a href="https://www.dreamstime.com/vilax_info">Aleksandr Volkov</a> | <a href="https://www.dreamstime.com/photos-images/time-machine.html">Dreamstime.com</a></p>
 		</div>
 	)
 }
