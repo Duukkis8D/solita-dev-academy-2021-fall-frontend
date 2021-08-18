@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The app is for Solita Dev Akatemia fall 2021 job application. It is meant to test the applicant's programming and problem solving skills.
+The app is for Solita Dev Akatemia fall 2021 job application. It is meant to test the applicant's programming and problem solving skills. More info about assignment here: https://github.com/solita/vaccine-exercise-2021.
 
 ## Function
 
