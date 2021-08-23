@@ -16,10 +16,13 @@ const BasicStatistics = ( {
 		dateOfLatestVaccination !== '' ) {
 		return (
 			<div id='basicStatistics'>
-				<p>Date of first vaccine order: <span>{ dateOfFirstOrder }</span></p>
-				<p>Date of latest vaccine order: <span>{ dateOfLatestOrder }</span></p>
-				<p>Date of first vaccination: <span>{ dateOfFirstVaccination }</span></p>
-				<p>Date of latest vaccination: <span>{ dateOfLatestVaccination }</span></p>
+				<p className='quantifierText statisticsInnerMarginTop'>Date of</p>
+				<ul className='statisticsInnerMarginBottom'>
+					<li>first vaccine order: <span>{ dateOfFirstOrder }</span></li>
+					<li>latest vaccine order: <span>{ dateOfLatestOrder }</span></li>
+					<li>first vaccination: <span>{ dateOfFirstVaccination }</span></li>
+					<li>latest vaccination: <span>{ dateOfLatestVaccination }</span></li>
+				</ul>
 			</div>
 		)
 	} else return <div id='basicStatistics'><p>Loading. Please wait.</p></div>

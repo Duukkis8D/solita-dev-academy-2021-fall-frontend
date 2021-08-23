@@ -51,8 +51,25 @@ h1 {
 	margin-top: 14px;
 }
 
+p,
+li {
+	line-height: 1.5;
+}
+
 #basicStatistics {
 	margin-top: 10px;
+}
+
+.statisticsInnerMarginTop {
+	margin-top: 16px;
+}
+
+.statisticsInnerMarginBottom {
+	margin-bottom: 16px;
+}
+
+.quantifierText {
+	margin-bottom: 4px;
 }
 
 #timeMachineHeadline {
@@ -68,7 +85,8 @@ h1 {
 
 p,
 label,
-span {
+span,
+ul {
 	font-size: 16px;
 }
 
@@ -76,7 +94,8 @@ input,
 button {
     font-size: 14px;
 	padding: 7px 5px 7px 5px;
-	margin: 5px 0 15px 0;
+	margin-top: 5px;
+	margin-bottom: 15px;
     border: 2px solid #eb6c3f;
     border-radius: 5px;
     background-color: white;
@@ -93,14 +112,21 @@ button {
 }
 
 #givenDateDescription {
-	margin-bottom: 8px;
+	margin-bottom: 0;
 }
 
 #givenDate {
 	font-family: "Nimbus Mono L", monospace;
     font-weight: normal;
 	margin-top: 0;
+	margin-bottom: 12px;
 	font-size: 18px;
+}
+
+ul {
+	list-style-type: disc;
+	margin-top: 0;
+	padding: 0 0 0 28px;
 }
 
 #expirationNote {
@@ -116,8 +142,8 @@ button {
 
 #basicStatistics > *,
 #statisticsBasedOnUserInput > * {
-	margin-left: 8px;
-	margin-right: 8px;
+	margin-left: 12px;
+	margin-right: 12px;
 }
 
 #photoInfo {

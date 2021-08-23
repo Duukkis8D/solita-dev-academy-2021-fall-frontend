@@ -21,9 +21,15 @@ const getAmountOfVaccines = ( dateAndTime ) => {
 	return request.then( response => response.data )
 }
 
+const getVaccinesExpiredBeforeUse = ( dateAndTime ) => {
+	const request = axios.get( `${baseUrl}/vaccinesExpiredBeforeUse/${dateAndTime}` )
+	return request.then( response => response.data )
+}
+
 export default {
 	getDateOfFirstOrder,
 	getDateOfLatestOrder,
 	getAmountOfOrders,
-	getAmountOfVaccines
+	getAmountOfVaccines,
+	getVaccinesExpiredBeforeUse
 }

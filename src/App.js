@@ -115,6 +115,7 @@ const App = () => {
 	const [ amountOfOrders, setAmountOfOrders ] = useState( '' )
 	const [ amountOfVaccinationsDone, setAmountOfVaccinationsDone ] = useState( '' )
 	const [ amountOfVaccines, setAmountOfVaccines ] = useState( '' )
+	const [ vaccinesExpiredBeforeUse, setVaccinesExpiredBeforeUse ] = useState( '' )
 	useEffect( () => {
 		if( dateAndTime !== '' ) {
 			orderService
@@ -131,6 +132,11 @@ const App = () => {
 				.getAmountOfVaccines( dateAndTime )
 				.then( response => {
 					setAmountOfVaccines( formatServerResponse( response ) )
+				} )
+			orderService
+				.getVaccinesExpiredBeforeUse( dateAndTime )
+				.then( response => {
+					setVaccinesExpiredBeforeUse( formatServerResponse( response ) )
 				} )
 		}
 	}, [ dateAndTime ] )
@@ -173,7 +179,8 @@ const App = () => {
 				amountOfOrders={ amountOfOrders }
 				amountOfVaccines={ amountOfVaccines }
 				amountOfVaccinationsDone={ amountOfVaccinationsDone }
-				vaccinesLeftToUse={ vaccinesLeftToUse }>
+				vaccinesLeftToUse={ vaccinesLeftToUse }
+				vaccinesExpiredBeforeUse={ vaccinesExpiredBeforeUse }>
 			</StatisticsBasedOnUserInput>
 
 			<p id='photoInfo'>Photo <a href="https://www.dreamstime.com/royalty-free-stock-image-time-machine-humour-concept-image17334246">17334246</a> / <a href="https://www.dreamstime.com/photos-images/time-machine.html">Time Machine</a> © <a href="https://www.dreamstime.com/vilax_info">Aleksandr Volkov</a> | <a href="https://www.dreamstime.com/photos-images/time-machine.html">Dreamstime.com</a></p>
