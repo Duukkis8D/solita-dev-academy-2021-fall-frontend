@@ -10,6 +10,8 @@ The app shows information from imaginary THL vaccination database (mockup data).
 
 ## Usage
 
+The app has two sides: this frontend (repository) and the following backend (repository): https://github.com/Duukkis8D/solita-dev-academy-2021-fall-backend.
+
 The app can be started in https://solita-fall-2021-duukkis8d.herokuapp.com/.
 
 Alternatively it can be started in local development environment by first cloning this repository to any directory.
